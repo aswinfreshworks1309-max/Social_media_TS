@@ -1,0 +1,68 @@
+CONNECT_HUB DATABASE SCHEMA (MONGODB COLLECTIONS)
+==============================================
+
+1. USERS COLLECTION
+-----------------
+Store user accounts and profile information.
+Fields:
+- _id: ObjectId (Primary Key)
+- firstName: String (Required)
+- lastName: String (Required)
+- email: String (Required, Unique)
+- password: String (Hashed)
+- profilePicture: String (URL to image)
+- bio: String
+- createdAt: Date (Default: now)
+
+2. POSTS COLLECTION
+-----------------
+Stores user-generated content/posts.
+Fields:
+- _id: ObjectId (Primary Key)
+- userId: ObjectId (Reference to Users._id)
+- content: String
+- image: String (URL if applicable)
+- likes: Array of ObjectIds (References to Users._id)
+- createdAt: Date (Default: now)
+
+3. COMMENTS COLLECTION
+--------------------
+Stores comments made on posts.
+Fields:
+- _id: ObjectId (Primary Key)
+- postId: ObjectId (Reference to Posts._id)
+- userId: ObjectId (Reference to Users._id)
+- text: String (Required)
+- createdAt: Date (Default: now)
+
+4. MESSAGES COLLECTION (For Chat)
+-------------------------------
+Stores direct messages between users.
+Fields:
+- _id: ObjectId (Primary Key)
+- senderId: ObjectId (Reference to Users._id)
+- receiverId: ObjectId (Reference to Users._id)
+- text: String (Required)
+- isRead: Boolean (Default: false)
+- createdAt: Date (Default: now)
+
+5. NOTIFICATIONS COLLECTION
+-------------------------
+Stores alerts for user interactions.
+Fields:
+- _id: ObjectId (Primary Key)
+- recipientId: ObjectId (Reference to Users._id)
+- senderId: ObjectId (Reference to Users._id)
+- type: String (Values: 'like', 'comment', 'follow')
+- postId: ObjectId (Reference to Posts._id, Optional)
+- isRead: Boolean (Default: false)
+- createdAt: Date (Default: now)
+
+6. FOLLOWS COLLECTION
+-------------------
+Manages following/follower relationships.
+Fields:
+- _id: ObjectId (Primary Key)
+- followerId: ObjectId (Reference to Users._id)
+- followingId: ObjectId (Reference to Users._id)
+- createdAt: Date (Default: now)
