@@ -12,14 +12,14 @@ import { initSocket } from "./socket.js";
 
 const app = express();
 app.use(express.json());
-import cors from "cors";
-
 app.use(
+
   cors({
     origin: "https://social-media-frontend-lyart-kappa.vercel.app",
     credentials: true,
   }),
 );
+
 
 const httpServer = createServer(app);
 initSocket(httpServer);
