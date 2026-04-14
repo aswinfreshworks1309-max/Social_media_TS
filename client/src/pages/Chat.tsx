@@ -7,7 +7,7 @@ import axios from 'axios';
 import { API_URL } from '../config/config';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:4000');
+const socket = io(API_URL);
 
 import { useSelector } from 'react-redux';
 import type { RootState } from '../redux/store';

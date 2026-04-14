@@ -7,8 +7,6 @@ import { connectDatabase } from "./config/db.js";
 import postRouter from "./routers/Post.js";
 import notificationRouter from "./routers/Notification.js";
 import chatRouter from "./routers/Chat.js";
- 
-
 import { createServer } from "http";
 import { initSocket } from "./socket.js";
 
