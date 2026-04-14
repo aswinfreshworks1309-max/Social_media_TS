@@ -16,10 +16,6 @@ interface RegisterFormValues {
     password: string;
     confirmPassword: string;
 }
-
-
-
-
 const Register = () => {
 
     //Schema validation
@@ -59,9 +55,7 @@ const Register = () => {
                 formData.append('avatar', imageFile);
             }
 
-            const response = await axios.post(`${API_URL}/register`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            const response = await axios.post(`${API_URL}/register`, formData);
 
             if (response.status === 200 || response.status === 201) {
                 showToast.success("Account created successfully!");

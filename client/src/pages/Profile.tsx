@@ -43,11 +43,9 @@ const Profile = () => {
     const dispatch = useDispatch<AppDispatch>();
     const emptyUser: UserType = {};
     const loggedInUser = useSelector((state: RootState) => state.user.user) ?? emptyUser;
-    
     const [profileUser, setProfileUser] = useState<UserType | null>(null);
     const [isOwnProfile, setIsOwnProfile] = useState(!id || id === loggedInUser._id);
     const [isFollowing, setIsFollowing] = useState(false);
-    
     const [open, setOpen] = useState(false);
     const [friendsOpen, setFriendsOpen] = useState(false);
     const [tabValue, setTabValue] = useState(0);
