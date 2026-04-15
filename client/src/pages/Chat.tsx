@@ -6,6 +6,7 @@ import { Search, Send } from "lucide-react";
 import api from "../services/api";
 import { API_URL } from "../config/config";
 import { io } from "socket.io-client";
+import chatBgImage from "../assets/chat_bg_image.png";
 
 const socket = io(API_URL);
 
@@ -198,83 +199,95 @@ const Chat = () => {
           </aside>
 
           {/* Chat Window */}
-          <section className="flex-1 flex flex-col bg-theme-bg/30">
-            {selectedContact ? (
-              <>
-                {/* Chat Header */}
-                <section className="p-6 border-b border-theme-border flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-full bg-theme-accent flex items-center justify-center text-white font-bold overflow-hidden">
-                      {selectedContact.avatar ? (
-                        <img
-                          src={selectedContact.avatar}
-                          alt="Avatar"
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <span>{selectedContact.firstName?.charAt(0)}</span>
-                      )}
+          <section className="flex-1 flex flex-col relative">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `url(${chatBgImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                opacity: 0.6,
+              }}
+            />
+            <div className="relative flex-1 bg-theme-bg/70 backdrop-blur-sm">
+              {selectedContact ? (
+                <>
+                  {/* Chat Header */}
+                  <section className="p-6 border-b border-theme-border flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="h-12 w-12 rounded-full bg-theme-accent flex items-center justify-center text-white font-bold overflow-hidden">
+                        {selectedContact.avatar ? (
+                          <img
+                            src={selectedContact.avatar}
+                            alt="Avatar"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span>{selectedContact.firstName?.charAt(0)}</span>
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg text-theme-text">
+                          {selectedContact.firstName} {selectedContact.lastName}
+                        </h3>
+                        <p className="text-xs text-green-700">Online</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-lg text-theme-text">
-                        {selectedContact.firstName} {selectedContact.lastName}
-                      </h3>
-                      <p className="text-xs text-green-400">Online</p>
-                    </div>
-                  </div>
-                </section>
+                  </section>
 
-                {/* Messages Area */}
-                <section className="flex-1 p-6 overflow-y-auto flex flex-col gap-4">
-                  {messages.map((msg, i) => (
-                    <div
-                      key={i}
-                      className={`max-w-[70%] px-5 py-3 rounded-2xl shadow-lg ${msg.senderId === user._id ? "self-end bg-theme-accent rounded-tr-none text-white" : "self-start bg-theme-input border border-theme-border rounded-tl-none text-theme-text"}`}
-                    >
-                      <p>{msg.text}</p>
-                      <span
-                        className={`text-[10px] mt-1 block ${msg.senderId === user._id ? "text-blue-100 text-right" : "text-theme-text-muted"}`}
+                  {/* Messages Area */}
+                  <section className="flex-1 p-6 overflow-y-auto flex flex-col gap-4 h-[550px]">
+                    {messages.map((msg, i) => (
+                      <div
+                        key={i}
+                        className={`max-w-[70%] px-5 py-3 rounded-2xl shadow-lg ${msg.senderId === user._id ? "self-end bg-theme-accent rounded-tr-none text-white" : "self-start bg-theme-input border border-theme-border rounded-tl-none text-theme-text"}`}
                       >
-                        {new Date(
-                          msg.createdAt || Date.now(),
-                        ).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
-                    </div>
-                  ))}
-                </section>
+                        <p>{msg.text}</p>
+                        <span
+                          className={`text-[10px] mt-1 block ${msg.senderId === user._id ? "text-blue-100 text-right" : "text-theme-text-muted"}`}
+                        >
+                          {new Date(
+                            msg.createdAt || Date.now(),
+                          ).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      </div>
+                    ))}
+                  </section>
 
-                {/* Input Area */}
-                <section className="p-6 border-t border-theme-border">
-                  <div className="flex items-center gap-4 bg-theme-input border border-theme-border rounded-2xl p-2 pl-4">
-                    <textarea
-                      value={text}
-                      onChange={(e) => setText(e.target.value)}
-                      onKeyDown={(e) =>
-                        e.key === "Enter" &&
-                        !e.shiftKey &&
-                        (e.preventDefault(), handleSend())
-                      }
-                      placeholder="Type your message..."
-                      className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 text-theme-text placeholder:text-theme-text-muted resize-none py-2 h-10"
-                    />
-                    <button
-                      onClick={handleSend}
-                      className="bg-theme-accent p-3 rounded-xl hover:bg-theme-accent-hover transition-colors"
-                    >
-                      <Send size={20} className="text-white" />
-                    </button>
-                  </div>
-                </section>
-              </>
-            ) : (
-              <div className="flex-1 flex flex-col items-center justify-center text-theme-text-muted">
-                <Search size={64} className="mb-4 opacity-20" />
-                <p>Select a contact to start chatting</p>
-              </div>
-            )}
+                  {/* Input Area */}
+                  <section className="p-6 border-t border-theme-border">
+                    <div className="flex items-center gap-4 bg-theme-input border border-theme-border rounded-2xl p-2 pl-4">
+                      <textarea
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                        onKeyDown={(e) =>
+                          e.key === "Enter" &&
+                          !e.shiftKey &&
+                          (e.preventDefault(), handleSend())
+                        }
+                        placeholder="Type your message..."
+                        className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 text-theme-text placeholder:text-theme-text-muted resize-none py-2 h-10"
+                      />
+                      <button
+                        onClick={handleSend}
+                        className="bg-theme-accent p-3 rounded-xl hover:bg-theme-accent-hover transition-colors"
+                      >
+                        <Send size={20} className="text-white" />
+                      </button>
+                    </div>
+                  </section>
+                </>
+              ) : (
+                <div className="flex-1 flex flex-col items-center justify-center text-gray-500 h-[700px]">
+                  <Search size={64} className="mb-4 " />
+                  <p>Select a contact to start chatting</p>
+                </div>
+              )}
+            </div>
           </section>
         </main>
       </div>

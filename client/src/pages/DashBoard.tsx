@@ -254,7 +254,7 @@ const DashBoard = () => {
                     backgroundColor: "var(--theme-accent)",
                     borderRadius: "20px",
                     color: "white",
-                    minWidth: "100px",
+                    minWidth: "80px",
                     "&:hover": { backgroundColor: "var(--theme-accent-hover)" },
                     "&:disabled": {
                       backgroundColor: "var(--theme-border)",
