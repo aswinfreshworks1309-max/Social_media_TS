@@ -4,6 +4,7 @@ import {
   List,
   ListItem,
   ListItemAvatar,
+  ListItemButton,
   ListItemText,
   Typography,
   Card,
@@ -12,11 +13,11 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import PostCard from "./Post";
-import axios from "axios";
-import { API_URL } from "../config/config";
+import api from "../services/api";
 import { showToast } from "../utils/toast";
 import { useSelector } from "react-redux";
 import type { RootState } from "../redux/store";
@@ -25,6 +26,7 @@ import type { ContactItem, PostItem, User } from "../types";
 const DashBoard = () => {
   const emptyUser: User = {};
   const user = useSelector((state: RootState) => state.user.user) ?? emptyUser;
+  const navigate = useNavigate();
   const [value, setValue] = useState("");
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -75,7 +77,7 @@ const DashBoard = () => {
         formData.append("image", imageFile);
       }
 
-      const response = await axios.post(`${API_URL}/posts`, formData, {
+      const response = await api.post(`/posts`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -99,7 +101,7 @@ const DashBoard = () => {
   // get request
   const getPost = async () => {
     try {
-      const response = await axios.get(`${API_URL}/posts`);
+      const response = await api.get(`/posts`);
       const fetchedPosts: PostItem[] = response.data.posts || [];
       setPosts(fetchedPosts);
     } catch (error) {
@@ -116,9 +118,7 @@ const DashBoard = () => {
   const getConnections = async () => {
     setIsLoadingConnections(true);
     try {
-      const response = await axios.get(
-        `${API_URL}/register?exclude=${user.email}`,
-      );
+      const response = await api.get(`/register?exclude=${user.email}`);
       const users: ContactItem[] = response.data.users || [];
       const following: string[] = response.data.following || [];
       setConnections(users);
@@ -132,7 +132,7 @@ const DashBoard = () => {
 
   const handleFollow = async (targetEmail: string) => {
     try {
-      const response = await axios.post(`${API_URL}/register/follow`, {
+      const response = await api.post(`/register/follow`, {
         followerEmail: user.email,
         followingEmail: targetEmail,
       });
@@ -370,7 +370,10 @@ const DashBoard = () => {
                               }}
                               secondaryAction={
                                 <Button
-                                  onClick={() => handleFollow(conn.email || "")}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleFollow(conn.email || "");
+                                  }}
                                   variant={isFollowing ? "outlined" : "text"}
                                   size="small"
                                   sx={{
@@ -391,45 +394,60 @@ const DashBoard = () => {
                                 </Button>
                               }
                             >
-                              <ListItemAvatar>
-                                <Avatar
-                                  alt={`${conn.firstName} ${conn.lastName}`}
-                                  src={conn.avatar}
-                                  sx={{
-                                    bgcolor: "var(--theme-accent)",
-                                    color: "black",
-                                    width: 45,
-                                    height: 45,
-                                    fontSize: "1rem",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  {conn.firstName
-                                    ? conn.firstName.charAt(0)
-                                    : "U"}
-                                </Avatar>
-                              </ListItemAvatar>
-                              <ListItemText
-                                primary={
-                                  <Typography
-                                    variant="subtitle2"
+                              <ListItemButton
+                                onClick={() =>
+                                  navigate(
+                                    conn._id
+                                      ? `/profile/${conn._id}`
+                                      : "/profile",
+                                  )
+                                }
+                                sx={{
+                                  px: 0,
+                                  py: 0,
+                                  textAlign: "left",
+                                }}
+                              >
+                                <ListItemAvatar>
+                                  <Avatar
+                                    alt={`${conn.firstName} ${conn.lastName}`}
+                                    src={conn.avatar}
                                     sx={{
+                                      bgcolor: "var(--theme-accent)",
+                                      color: "black",
+                                      width: 45,
+                                      height: 45,
+                                      fontSize: "1rem",
                                       fontWeight: "bold",
-                                      color: "var(--theme-text)",
                                     }}
                                   >
-                                    {conn.firstName} {conn.lastName}
-                                  </Typography>
-                                }
-                                secondary={
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ color: "gray" }}
-                                  >
-                                    {conn.email?.split("@")[0]}
-                                  </Typography>
-                                }
-                              />
+                                    {conn.firstName
+                                      ? conn.firstName.charAt(0)
+                                      : "U"}
+                                  </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                  primary={
+                                    <Typography
+                                      variant="subtitle2"
+                                      sx={{
+                                        fontWeight: "bold",
+                                        color: "var(--theme-text)",
+                                      }}
+                                    >
+                                      {conn.firstName} {conn.lastName}
+                                    </Typography>
+                                  }
+                                  secondary={
+                                    <Typography
+                                      variant="caption"
+                                      sx={{ color: "gray" }}
+                                    >
+                                      {conn.email?.split("@")[0]}
+                                    </Typography>
+                                  }
+                                />
+                              </ListItemButton>
                             </ListItem>
                             {index < connections.length - 1 && (
                               <Divider

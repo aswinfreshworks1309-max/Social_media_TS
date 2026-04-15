@@ -27,7 +27,11 @@ const createUser = async (req, res) => {
       return res.status(409).json({ message: result });
     }
 
-    return res.status(200).json({ message: "User created", data: result });
+    // Remove password from sensitive data
+    const userResponse = result.toObject ? result.toObject() : { ...result };
+    delete userResponse.password;
+
+    return res.status(200).json({ message: "User created", data: userResponse });
   } catch (error) {
     console.error("createUser controller error:", error.message);
     return res.status(500).json({ message: "Error creating user", error: error.message });

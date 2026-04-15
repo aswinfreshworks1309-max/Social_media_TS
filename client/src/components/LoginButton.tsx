@@ -7,7 +7,12 @@ interface ButtonProps {
   className?: string;
 }
 
-const Button = ({ text = "Button", type = "button", onClick, className = "" }: ButtonProps) => {
+const Button = ({
+  text = "Button",
+  type = "button",
+  onClick,
+  className = "",
+}: ButtonProps) => {
   return (
     <>
       <style>{`
@@ -60,7 +65,11 @@ const Button = ({ text = "Button", type = "button", onClick, className = "" }: B
         }
       `}</style>
 
-      <button type={type} onClick={onClick} className={`box-button ${className}`}>
+      <button
+        type={type}
+        onClick={onClick}
+        className={`box-button ${className}`}
+      >
         <span className="box-span">{text}</span>
       </button>
     </>

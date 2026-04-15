@@ -1,5 +1,6 @@
 import login_service from "../services/Login.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const verifyLogin = async (req, res) => {
   const payload = req.body;
@@ -18,7 +19,16 @@ const verifyLogin = async (req, res) => {
       return res.status(401).json({ message: "Invalid Password" });
     }
 
-    return res.status(200).json({ message: "Login Successful", user: result });
+    const token = jwt.sign(
+      { id: result._id, email: result.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "10h" },
+    );
+
+    const { password: _, ...userData } = result;
+    return res
+      .status(200)
+      .json({ message: "Login Successful", user: userData, token });
   } catch (err) {
     return res
       .status(400)
@@ -31,24 +41,3 @@ const login_controllers = {
 };
 
 export default login_controllers;
-
-// import login_service from "../services/Login.js";
-
-// const verifyLogin = async(req, res) => {
-//     const payload = await req.body
-//     try {
-//         console.log(payload)
-//         login_service.verifyLogin(payload)
-//         return res.status(200).json({message:"Login Successful"})
-
-//     }
-//     catch (err) {
-//         return res.status(400).json({message:"Invalid User ",err})
-//     }
-// }
-
-// const login_controllers = {
-//     verifyLogin
-// }
-
-// export default login_controllers;

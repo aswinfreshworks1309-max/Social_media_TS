@@ -1,33 +1,21 @@
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const toastConfig = {
+  position: 'top-right' as const,
+  autoClose: 3000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: 'dark' as const,
+};
 
 export const showToast = {
-  success: (message: string) => toast.success(message, {
-    style: {
-      borderRadius: '12px',
-      background: '#1e293b',
-      color: '#fff',
-      border: '1px solid var(--theme-border)',
-    },
-    iconTheme: {
-      primary: 'var(--theme-accent)',
-      secondary: '#fff',
-    },
-  }),
-  error: (message: string) => toast.error(message, {
-    style: {
-      borderRadius: '12px',
-      background: '#1e293b',
-      color: '#fff',
-      border: '1px solid var(--theme-border)',
-    },
-  }),
-  loading: (message: string) => toast.loading(message, {
-    style: {
-      borderRadius: '12px',
-      background: '#1e293b',
-      color: '#fff',
-      border: '1px solid var(--theme-border)',
-    },
-  }),
+  success: (message: string) => toast.success(message, toastConfig),
+  error: (message: string) => toast.error(message, toastConfig),
+  info: (message: string) => toast.info(message, toastConfig),
+  warning: (message: string) => toast.warning(message, toastConfig),
   dismiss: () => toast.dismiss(),
 };
