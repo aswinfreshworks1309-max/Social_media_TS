@@ -16,6 +16,8 @@ interface LoginFormValues {
   password: string;
 }
 
+// Login page component for user authentication
+// Login page component for user authentication
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -23,7 +25,9 @@ const Login = () => {
     email: yup.string().email("invalid Email").required("Email is required"),
     password: yup.string().required("Password is required"),
   });
+  // Authenticate the user and store auth state on success
 
+  // Authenticate the user and store auth state on success
   const handleLogin = async (values: LoginFormValues) => {
     try {
       const response = await axios.post(`${API_URL}/login`, values);
@@ -43,96 +47,115 @@ const Login = () => {
     }
   };
   return (
-    <>
-      <section className="flex justify-center items-center h-screen bg-theme-bg">
-        <header className=" w-full h-[80px]  border-b border-theme-border absolute top-0 left-0 flex justify-start items-center">
-          <h1 className="text-3xl font-bold text-theme-accent ml-[4%]">
-            ConnectHub
-          </h1>
-        </header>
-        <br />
+    <div className="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-theme-accent/20 rounded-full blur-[120px] animate-blob"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/20 rounded-full blur-[120px] animate-blob [animation-delay:2s]"></div>
 
-        <main className="h-[600px] w-[400px] border border-theme-border rounded-[30px] flex justify-center items-center flex-col gap-4 bg-theme-input backdrop-blur-md">
-          <div className="flex flex-col justify-center items-center gap-4">
-            <h1 className="text-2xl font-bold text-center text-theme-accent">
-              ConnectHub
-            </h1>
-            <div className="flex flex-col justify-center items-center gap-2">
-              <h1 className="text-3xl font-bold text-center text-theme-text">
-                Welcome Back
-              </h1>
-              <p className="text-center text-theme-text-secondary">
-                Connect with your world in a click
-              </p>
-            </div>
+      <header className="fixed top-0 left-0 w-full p-8 z-50">
+        <h1 className="text-2xl font-black tracking-tighter text-gradient">
+          ConnectHub
+        </h1>
+      </header>
+
+      <main 
+        data-aos="zoom-in"
+        className="glass-panel w-full max-w-[450px] p-10 rounded-[40px] shadow-premium relative z-10"
+      >
+        <div className="text-center mb-10">
+          <div className="w-16 h-16 bg-gradient-to-br from-theme-accent to-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-theme-accent/20 transform -rotate-6">
+            <h1 className="text-2xl font-black text-white">C</h1>
           </div>
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            validationSchema={schemaValidation}
-            onSubmit={handleLogin}
-          >
-            <Form className="flex flex-col gap-4 justify-center items-center">
-              <div className="flex flex-col gap-2">
-                <label
-                  htmlFor="Email Address"
-                  className="text-theme-text-secondary"
-                >
-                  Email Address
-                </label>
-                <Field
-                  type="email"
-                  id="Email Address"
-                  placeholder="Enter your Email"
-                  name="email"
-                  className="h-[40px] w-[300px] border border-theme-border text-theme-text bg-transparent p-[10px] rounded-[7px] focus:border-2 focus:border-theme-accent focus:outline-none placeholder:text-theme-text-muted "
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className="text-red-500 text-sm w-full text-center"
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label htmlFor="Password" className="text-theme-text-secondary">
-                  Password
-                </label>
-                <Field
-                  type="password"
-                  id="Password"
-                  name="password"
-                  placeholder="Enter your Password"
-                  className="h-[40px] w-[300px] border border-theme-border text-theme-text bg-transparent p-[10px] rounded-[7px] focus:border-2 focus:border-theme-accent focus:outline-none placeholder:text-theme-text-muted"
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="text-red-500 text-sm w-full text-center"
-                />
-              </div>
-              <div className="flex justify-start w-[300px] gap-2">
-                <input type="checkbox" id="remember-me" />
-                <label
-                  htmlFor="remember-me"
-                  className="text-theme-text-secondary"
-                >
-                  Keep me logged in
-                </label>
-              </div>
-              <LoginButton text="Login" type="submit" />
+          <h2 className="text-3xl font-black tracking-tight mb-2">Welcome Back</h2>
+          <p className="text-theme-text-muted font-bold text-sm uppercase tracking-widest">
+            Identity verification required
+          </p>
+        </div>
 
-              <p className="text-theme-text-secondary">
-                Don't have an account ?{" "}
-                <Link to="/" className=" text-blue-500  cursor-pointer underline">
-                  Register
-                </Link>
-              </p>
-            </Form>
-          </Formik>
-        </main>
-      </section>
-      <div className="h-[30%] w-[20%]   rounded-[30px] absolute top-[35%] left-[15%] transform translate-x-[-50%] translate-y-[-50%]  bg-theme-accent/20 blur-[100px] "></div>
-    </>
-  );
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={schemaValidation}
+          onSubmit={handleLogin}
+        >
+          <Form className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="email"
+                className="text-[10px] font-black uppercase tracking-[0.2em] text-theme-text-muted ml-1"
+              >
+                Access ID (Email)
+              </label>
+              <Field
+                type="email"
+                id="email"
+                placeholder="explorer@connecthub.net"
+                name="email"
+                className="w-full bg-theme-input/40 border border-theme-border p-4 rounded-2xl focus:ring-2 focus:ring-theme-accent/50 focus:outline-none text-theme-text transition-all duration-300 font-bold placeholder:text-theme-text-muted/40"
+              />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className="text-rose-500 text-[10px] font-black uppercase tracking-widest mt-1 ml-1"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label 
+                htmlFor="password" 
+                className="text-[10px] font-black uppercase tracking-[0.2em] text-theme-text-muted ml-1"
+              >
+                Security Key
+              </label>
+              <Field
+                type="password"
+                id="password"
+                name="password"
+                placeholder="••••••••"
+                className="w-full bg-theme-input/40 border border-theme-border p-4 rounded-2xl focus:ring-2 focus:ring-theme-accent/50 focus:outline-none text-theme-text transition-all duration-300 font-bold placeholder:text-theme-text-muted/40"
+              />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-rose-500 text-[10px] font-black uppercase tracking-widest mt-1 ml-1"
+              />
+            </div>
+
+            <div className="flex items-center justify-between px-1">
+              <label className="flex items-center gap-2 cursor-pointer group">
+                <input 
+                  type="checkbox" 
+                  id="remember-me" 
+                  className="w-4 h-4 rounded border-theme-border bg-theme-input focus:ring-theme-accent text-theme-accent" 
+                />
+                <span className="text-xs font-bold text-theme-text-muted group-hover:text-theme-text transition-colors">
+                  Stay Connected
+                </span>
+              </label>
+              <Link to="/" className="text-xs font-bold text-theme-accent hover:text-white transition-colors">
+                Reset Keys?
+              </Link>
+            </div>
+
+            <button 
+              type="submit"
+              className="w-full py-4 bg-gradient-to-r from-theme-accent to-indigo-600 text-white rounded-2xl font-black tracking-widest uppercase text-xs shadow-lg shadow-theme-accent/20 hover:scale-[1.02] active:scale-95 transition-all duration-300 mt-4"
+            >
+              Initialize Session
+            </button>
+
+            <p className="text-center text-xs font-bold text-theme-text-muted mt-4">
+              New Explorer?{" "}
+              <Link
+                to="/"
+                className="text-theme-accent hover:underline decoration-2 underline-offset-4"
+              >
+                Join the Network
+              </Link>
+            </p>
+          </Form>
+        </Formik>
+      </main>
+    </div>  );
 };
 
 export default Login;

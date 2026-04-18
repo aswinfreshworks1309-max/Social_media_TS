@@ -13,6 +13,8 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../redux/store";
 import type { NotificationItem, User } from "../types";
 
+// Notification center component showing real-time alerts
+// Notification center component showing real-time alerts
 function Notification() {
   const emptyUser: User = {};
   const [notification, setNotification] = useState<NotificationItem[]>([]);
@@ -33,7 +35,9 @@ function Notification() {
       socket.off("receive_notification");
     };
   }, [user._id]);
+  // Load notifications for the current user
 
+  // Load notifications for the current user
   const fetchNotification = async () => {
     if (!user._id) return;
     try {
@@ -49,8 +53,10 @@ function Notification() {
   };
   useEffect(() => {
     fetchNotification();
+    // Mark a notification as read on the server and update local state
   }, [user._id]);
 
+  // Mark a notification as read on the server and update local state
   const markAsRead = async (id: string) => {
     try {
       await api.put(`/notification/${id}/read`);
@@ -61,9 +67,11 @@ function Notification() {
       );
     } catch (err) {
       console.log(err);
+      // Handle navigation and read status when a notification is clicked
     }
   };
 
+  // Handle navigation and read status when a notification is clicked
   const handleNotificationClick = async (notify: NotificationItem) => {
     if (!notify.isRead) {
       await markAsRead(notify._id || "");
@@ -76,8 +84,8 @@ function Notification() {
   return (
     <div className="w-full min-h-screen bg-theme-bg text-theme-text">
       <Header />
-      <div className="flex mt-[20px]">
-        <aside className="w-[20%]">
+      <div className="flex mt-[40px]">
+        <aside className="w-[20%] ml-[60px]">
           <SideBar />
         </aside>
 

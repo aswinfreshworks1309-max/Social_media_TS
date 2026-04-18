@@ -16,8 +16,11 @@ interface RegisterFormValues {
   password: string;
   confirmPassword: string;
 }
+
+
+// Registration page for creating a new user account
 const Register = () => {
-  
+
   //Schema validation
 
   const validationSchema = yup.object({
@@ -42,6 +45,8 @@ const Register = () => {
   const [image, setImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
+
+  // Preview and store the selected registration avatar image
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -51,7 +56,7 @@ const Register = () => {
     }
   };
 
-  // form handling
+  // Submit registration data and create a new user account
   const handleRegister = async (values: RegisterFormValues) => {
     try {
       const formData = new FormData();
@@ -77,164 +82,138 @@ const Register = () => {
     }
   };
   return (
-    <>
-      <section className="flex justify-center items-center flex-col  bg-theme-bg">
-        <header className=" w-full h-[80px]  border-b border-theme-border absolute top-0 left-0 flex justify-start items-center">
-          <h1 className="text-3xl font-bold text-theme-accent ml-[4%]">
-            ConnectHub
-          </h1>
-        </header>
-        <br />
-        <main className="flex justify-center items-center flex-col gap-[10px] w-[400px] flex flex-col p-4 mt-25 border border-theme-border mb-10 rounded-[30px] bg-theme-input backdrop-blur-md">
-          <div className="flex flex-col justify-center items-center gap-2">
-            <h1 className="text-3xl font-bold text-theme-text">
-              Create Account
-            </h1>
-            <h4 className="w-[300px] text-center text-theme-text-secondary ">
-              Upload an avatar and fill in your details to get started.
-            </h4>
-          </div>
-          <Formik
-            initialValues={{
-              firstName: "",
-              lastName: "",
-              email: "",
-              password: "",
-              confirmPassword: "",
-            }}
-            validationSchema={validationSchema}
-            onSubmit={handleRegister}
-          >
-            <Form className="flex flex-col justify-center items-center gap-3">
-              <label className="h-[100px] w-[100px] rounded-full cursor-pointer hover:scale-105 transition border-[3px] border-theme-text-muted border-dotted flex justify-center items-center overflow-hidden">
-                {image ? (
-                  <img
-                    src={image}
-                    alt="profile"
-                    className="w-full h-full object-cover rounded-full"
-                  />
-                ) : (
-                  <Camera className="text-theme-text-secondary" size={30} />
-                )}
+    <div className="min-h-screen w-full flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Dynamic Background Blobs */}
+      <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-theme-accent/20 rounded-full blur-[120px] animate-blob"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-600/10 rounded-full blur-[120px] animate-blob [animation-delay:3s]"></div>
 
+      <header className="fixed top-0 left-0 w-full p-8 z-50">
+        <h1 className="text-2xl font-black tracking-tighter text-gradient">
+          ConnectHub
+        </h1>
+      </header>
+
+      <main 
+        data-aos="zoom-in"
+        className="glass-panel w-full max-w-[500px] p-10 rounded-[40px] shadow-premium relative z-10 my-20"
+      >
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-black tracking-tight mb-2">Join the Network</h2>
+          <p className="text-theme-text-muted font-bold text-sm uppercase tracking-widest">
+            Create your digital identity
+          </p>
+        </div>
+
+        <Formik
+          initialValues={{
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={handleRegister}
+        >
+          <Form className="flex flex-col gap-6">
+            {/* Avatar Section */}
+            <div className="flex justify-center mb-4">
+              <label className="relative group cursor-pointer">
+                <div className={`h-28 w-28 rounded-[32px] border-2 border-dashed border-theme-accent/50 flex flex-col items-center justify-center overflow-hidden transition-all duration-500 group-hover:border-theme-accent group-hover:bg-theme-accent/10 ${image ? 'border-solid border-theme-accent shadow-lg shadow-theme-accent/20' : ''}`}>
+                  {image ? (
+                    <img src={image} alt="profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <>
+                      <Camera className="text-theme-accent opacity-50 mb-1" size={24} />
+                      <span className="text-[8px] font-black uppercase tracking-widest text-theme-text-muted">Digital Face</span>
+                    </>
+                  )}
+                </div>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleImage}
                   className="hidden"
                 />
+                <div className="absolute -bottom-2 -right-2 bg-theme-accent text-white p-2 rounded-xl shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300">
+                  <Camera size={14} />
+                </div>
               </label>
-              <div className="flex gap-3 ml-[10%]">
-                <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="First Name"
-                    className="text-theme-text-secondary"
-                  >
-                    First Name
-                  </label>
-                  <Field
-                    type="text"
-                    placeholder="First Name"
-                    name="firstName"
-                    className="w-[80%] border border-theme-border bg-transparent h-[40px] p-[20px] text-theme-text rounded-[7px] focus:border-2 focus:border-theme-accent focus:outline-none placeholder:text-theme-text-muted"
-                  />
-                  <ErrorMessage
-                    name="firstName"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="Last Name"
-                    className="text-theme-text-secondary"
-                  >
-                    Last Name <span className="text-theme-text-muted">(optional)</span>
-                  </label>
-                  <Field
-                    type="text"
-                    placeholder="Last Name"
-                    name="lastName"
-                    className="w-[80%] border border-theme-border bg-transparent h-[40px] p-[20px] text-theme-text rounded-[7px] focus:border-2 focus:border-theme-accent focus:outline-none placeholder:text-theme-text-muted"
-                  />
-                </div>
-              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
-                <label htmlFor="Email" className="text-theme-text-secondary">
-                  Email
-                </label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-theme-text-muted ml-1">Manifest Name</label>
                 <Field
                   type="text"
-                  placeholder="Email"
-                  name="email"
-                  className="w-[300px] border border-theme-border bg-transparent h-[40px] p-[20px] text-theme-text rounded-[7px] focus:border-2 focus:border-theme-accent focus:outline-none placeholder:text-theme-text-muted"
+                  placeholder="First"
+                  name="firstName"
+                  className="w-full bg-theme-input/40 border border-theme-border p-3.5 rounded-2xl focus:ring-2 focus:ring-theme-accent/50 focus:outline-none text-theme-text transition-all duration-300 font-bold placeholder:text-theme-text-muted/40"
                 />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className="text-red-500"
+                <ErrorMessage name="firstName" component="div" className="text-rose-500 text-[8px] font-black uppercase tracking-widest mt-1 ml-1" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-theme-text-muted ml-1">Legacy Name</label>
+                <Field
+                  type="text"
+                  placeholder="Last"
+                  name="lastName"
+                  className="w-full bg-theme-input/40 border border-theme-border p-3.5 rounded-2xl focus:ring-2 focus:ring-theme-accent/50 focus:outline-none text-theme-text transition-all duration-300 font-bold placeholder:text-theme-text-muted/40"
                 />
               </div>
+            </div>
 
-              <div className="flex gap-4 flex-col md-6">
-                <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="Password"
-                    className="text-theme-text-secondary"
-                  >
-                    Password
-                  </label>
-                  <Field
-                    type="password"
-                    placeholder="Password"
-                    name="password"
-                    className="w-[300px] border border-theme-border bg-transparent h-[40px] p-[20px] text-theme-text rounded-[7px] focus:border-2 focus:border-theme-accent focus:outline-none placeholder:text-theme-text-muted"
-                  />
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="Confirm Password"
-                    className="text-theme-text-secondary"
-                  >
-                    Confirm Password
-                  </label>
-                  <Field
-                    type="password"
-                    placeholder="Confirm Password"
-                    name="confirmPassword"
-                    className="w-[300px] border border-theme-border bg-transparent h-[40px] p-[20px] text-theme-text rounded-[7px] focus:border-2 focus:border-theme-accent focus:outline-none placeholder:text-theme-text-muted"
-                  />
-                  <ErrorMessage
-                    name="confirmPassword"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-theme-text-muted ml-1">Communication Channel</label>
+              <Field
+                type="text"
+                placeholder="email@network.com"
+                name="email"
+                className="w-full bg-theme-input/40 border border-theme-border p-3.5 rounded-2xl focus:ring-2 focus:ring-theme-accent/50 focus:outline-none text-theme-text transition-all duration-300 font-bold placeholder:text-theme-text-muted/40"
+              />
+              <ErrorMessage name="email" component="div" className="text-rose-500 text-[8px] font-black uppercase tracking-widest mt-1 ml-1" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-theme-text-muted ml-1">Security Key</label>
+                <Field
+                  type="password"
+                  placeholder="••••••••"
+                  name="password"
+                  className="w-full bg-theme-input/40 border border-theme-border p-3.5 rounded-2xl focus:ring-2 focus:ring-theme-accent/50 focus:outline-none text-theme-text transition-all duration-300 font-bold placeholder:text-theme-text-muted/40"
+                />
+                <ErrorMessage name="password" component="div" className="text-rose-500 text-[8px] font-black uppercase tracking-widest mt-1 ml-1" />
               </div>
-              <div className="mt-[10px] flex flex-col gap-2 justify-center items-center">
-                <LoginButton text="Register" type="submit" />
-                <p className="text-theme-text-secondary">
-                  Already have an account ?{" "}
-                  <a
-                    href="/login"
-                    className="text-blue-500 cursor-pointer underline "
-                  >
-                    Login
-                  </a>
-                </p>
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-theme-text-muted ml-1">Verify Key</label>
+                <Field
+                  type="password"
+                  placeholder="••••••••"
+                  name="confirmPassword"
+                  className="w-full bg-theme-input/40 border border-theme-border p-3.5 rounded-2xl focus:ring-2 focus:ring-theme-accent/50 focus:outline-none text-theme-text transition-all duration-300 font-bold placeholder:text-theme-text-muted/40"
+                />
+                <ErrorMessage name="confirmPassword" component="div" className="text-rose-500 text-[8px] font-black uppercase tracking-widest mt-1 ml-1" />
               </div>
-            </Form>
-          </Formik>
-        </main>
-      </section>
-      <div className="h-[30%] w-[20%]   rounded-[30px] absolute top-[35%] left-[15%] transform translate-x-[-50%] translate-y-[-50%]  bg-theme-accent/20 opacity-0.3 blur-[100px] "></div>
-    </>
-  );
+            </div>
+
+            <button 
+              type="submit"
+              className="w-full py-4 bg-gradient-to-r from-emerald-500 to-theme-accent text-white rounded-2xl font-black tracking-widest uppercase text-xs shadow-lg shadow-theme-accent/20 hover:scale-[1.02] active:scale-95 transition-all duration-300 mt-4"
+            >
+              Authorize Identity
+            </button>
+
+            <p className="text-center text-xs font-bold text-theme-text-muted mt-2">
+              Already manifest?{" "}
+              <Link to="/login" className="text-theme-accent hover:underline decoration-2 underline-offset-4">
+                Access Core
+              </Link>
+            </p>
+          </Form>
+        </Formik>
+      </main>
+    </div>  );
 };
 
 export default Register;

@@ -7,8 +7,9 @@ interface ButtonProps {
   className?: string;
 }
 
+// Reusable styled button component for auth forms and actions
 const Button = ({
-  text = "Button",
+  text = "",
   type = "button",
   onClick,
   className = "",

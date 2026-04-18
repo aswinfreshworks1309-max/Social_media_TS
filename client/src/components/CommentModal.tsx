@@ -13,6 +13,7 @@ interface CommentModalProps {
   existingComments?: CommentItem[];
 }
 
+// Modal dialog used to display and submit comments for a post
 const CommentModal = ({
   isOpen,
   onClose,
@@ -27,6 +28,7 @@ const CommentModal = ({
 
   if (!isOpen) return null;
 
+  // Submit a new comment and refresh the comment list on success
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!comment.trim()) return;
